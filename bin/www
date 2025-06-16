@@ -1,0 +1,111 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+require('dotenv').config({ path: '.env' }); // Load environment variables from .env file
+var http = require('http');
+var debug = require('debug')(`express:server`); // debugging utility for logging
+var error = require('debug')(`express:error`); // debugging utility for error logging
+
+if (!process.env.NODE_APP) {
+  error('NODE_APP environment variable is not set. Please set it to the path of your app.');
+  process.exit(1);
+}
+
+debug('Setting app from path: ', process.env.NODE_APP);
+var app = require(process.env.NODE_APP);
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+debug('Determining server port...');
+var port = normalizePort(process.env.PORT || '4000');
+
+debug('Setting server port to ', port);
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+debug('Setting server to mount app... ', app.mountpath);
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+debug('Starting server on port ', port);
+server.listen(port, function() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Server listening on ' + bind);
+});
+server.on('error', onError);
+//server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(err) {
+  if (err.syscall !== 'listen') {
+    throw err;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (err.code) {
+    case 'EACCES':
+      error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    case 'ECONNRESET':
+      error(bind + ' connection error');
+      process.exit(1);
+      break;
+    default:
+      throw err;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
