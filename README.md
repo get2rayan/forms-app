@@ -95,6 +95,10 @@ PORT= 4000
 NODE_APP= './../build/server/app'
 # name of the application
 APP_NAME= 'formsApp'
+# DB Properties
+MONGODB_URI="your_mongodb_atlas_connection_string"
+DB_NAME="formsDB"
+COLLECTION_NAME="profiles"
 ```
 
 ### 4. MongoDB Atlas Setup

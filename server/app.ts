@@ -51,17 +51,17 @@ app.use((err: ErrorWithStatus, req: Request, res: Response, next: NextFunction) 
   res.render('error');
 });
 
-/******* fallback code to run app *****/
-const port = process.env.PORT || 3030;  // Default to port 3030 if not specified in environment variables
-
-app.listen(port, (err?: Error) => {
-  if (err) {
-      console.error("Error starting the server:", err);
-      return;
-  }   
-  console.log(`Server app is running on http://localhost:${port}`);
-});
-/******* fallback code to run app *****/
+// /******* fallback code to run app on PORT when running locally *****/
+// /*****Uncomment the following lines to run the app on a specific port when running locally *****/
+// const port = process.env.PORT || 3030;  // Default to port 3030 if not specified in environment variables
+// app.listen(port, (err?: Error) => {
+//   if (err) {
+//       console.error("Error starting the server:", err);
+//       return;
+//   }   
+//   console.log(`Server app is running on http://localhost:${port}`);
+// });
+// /*****************************************************************/
 
 // Export the configured app so it can be imported in other files (like bin/www)
 module.exports = app;
