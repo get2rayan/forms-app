@@ -8,7 +8,7 @@ console.log("Using API URL:", profilesApiUrl);
 
 export class ProfileDataService {
     
-    static async getProfiles(): Promise<Profile[]> {
+    static async getProfiles(): Promise<Profile[] | null> {
         try {
             const response = await fetch(profilesApiUrl!);
             if (!response.ok) {
@@ -17,8 +17,9 @@ export class ProfileDataService {
             return await response.json();
         } catch (error) { 
             console.error("Error fetching profiles:", error);
-            throw error;
+            //throw error;
         }
+        return null;
     }
 
     static async addProfile(profile: Profile): Promise<boolean> {

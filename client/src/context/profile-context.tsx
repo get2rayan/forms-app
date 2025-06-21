@@ -22,6 +22,7 @@ export function ProfileContextProvider({ children }: { children: React.ReactNode
             })
             .catch((error) => {
                 console.error("Error fetching profiles:", error);
+                throw error;
             });
     }, [setProfiles]);
     
@@ -34,8 +35,7 @@ export function ProfileContextProvider({ children }: { children: React.ReactNode
                 return;
             }
         } catch (error) {
-            console.error("Error adding profile:", error);
-            return;
+            throw error;
         }
     };
 

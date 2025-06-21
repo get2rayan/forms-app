@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import Footer from "./Footer";
 import { Profile } from "common";
 import { useProfileContext } from "../context/profile-context";
@@ -8,30 +7,24 @@ import { useForm } from "react-hook-form";
 export default function ProfileForm(){
     
     const { register, handleSubmit, reset, formState: {errors, isSubmitting } } = useForm<Profile>();
-
+    
     const profileCtx = useProfileContext();
     const navigate = useNavigate();
     
-    const onSubmit = async(data: Profile) => {        
-        let timeoutId;
+    const onSubmit = async(data: Profile) => {
+        let timeoutId : NodeJS.Timeout | undefined;
         try{        
             console.log(`Submitting... ${JSON.stringify(data)}`);
-            await new Promise((resolve)=>timeoutId= setTimeout(()=> resolve(profileCtx.addProfile(data)), 1000));
-            navigate('/thank-you');            
+            await new Promise((resolve)=>timeoutId= setTimeout(()=> resolve(profileCtx.addProfile(data)), 1000))
+            navigate('/thank-you', { state: { isSubmitted: true } });
         } catch (error) {
-            console.error('Error submitting form:', error);
-            //setIsSubmitting(false);
+            navigate('/thank-you', { state: { isSubmitted: false, error: error } });
         } finally {
-            console.log(`clearing timeout ${timeoutId}`)
-            clearTimeout(timeoutId);            
+            clearTimeout(timeoutId);
             reset();
         }
     };
-
-    // useEffect(() => {      
-    //         console.log('Total user Profiles :', profileCtx.profiles?.length);
-    //     }, [profileCtx.profiles]);
-    
+        
     return (
             <div className="bg-gray-100 flex min-h-screen flex-col items-center justify-center p-24"> {/* Consider justify-center here if you want the whole block (header, form, footer) to be vertically centered when content is short */}
                 <div className="w-full max-w-lg bg-gradient-to-r from-blue-500 to-indigo-500 px-8 py-6 rounded-t-md"> {/* Added rounded-t-md for visual consistency if form below has rounded corners */}
