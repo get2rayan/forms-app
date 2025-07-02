@@ -4,6 +4,7 @@ import { ProfileDataService } from "../services/profileDataService";
 
 type ProfileContextType = {
     profiles: Profile[] | null;
+    fetchProfiles: () => Promise<Profile[] | null>;
     addProfile: (profile: Profile) => void;
     deleteProfile: (profileId: Profile["profileId"]) => void;
 };
@@ -15,49 +16,47 @@ export function ProfileContextProvider({ children }: { children: React.ReactNode
     const [profiles, setProfiles] = useState<Profile[] | null>(null);
 
     useEffect(() => {
-        // get existing profiles from api
-        ProfileDataService.getProfiles()
-            .then((profiles) => {
-                setProfiles(profiles);  // Initialize state with fetched profiles                
-            })
-            .catch((error) => {
-                console.error("Error fetching profiles:", error);
-                throw error;
-            });
+        const initializeProfiles = async () => {
+            try {
+                const profilesData = await fetchProfiles();
+                setProfiles(profilesData);
+            } catch (error) {
+                console.error("Error initializing profiles:", error);
+            }
+        };
+
+        initializeProfiles();
     }, [setProfiles]);
     
+    const fetchProfiles = async () : Promise<Profile[] | null> => {
+        // Fetch profiles from the API
+        return await ProfileDataService.getProfiles();
+    }
+
     const addProfile = async (profile: Profile) => {
         // Add new profile to the API
-        try {
-            const isAdded = await ProfileDataService.addProfile(profile);
-            if (!isAdded) {
-                console.error("Failed to add profile");
-                return;
-            }
-        } catch (error) {
-            throw error;
+        const isAdded = await ProfileDataService.addProfile(profile);
+        if (!isAdded) {
+            console.error("Failed to add profile");
+            return;
         }
     };
 
     const deleteProfile = async (profileId: Profile["profileId"]) => {
         // Delete profile from the API
-        try {
-            const isDeleted = await ProfileDataService.deleteProfile(profileId);
-            if (!isDeleted) {
-                console.error("Failed to delete profile");
-                return;
-            }
-            // Update state after deletion
-            setProfiles((prevProfiles) => 
-                prevProfiles ? prevProfiles.filter((p) => p.profileId !== Number(profileId)) : null
-            );
-        } catch (error) {
-            console.error("Error deleting profile:", error);
+        const isDeleted = await ProfileDataService.deleteProfile(profileId);
+        if (!isDeleted) {
+            console.error("Failed to delete profile");
+            return;
         }
+        // Update state after deletion
+        setProfiles((prevProfiles) => 
+            prevProfiles ? prevProfiles.filter((p) => p.profileId !== Number(profileId)) : null
+        );        
     };
 
     return (
-        <ProfileContext.Provider value={{ profiles, addProfile, deleteProfile }}>
+        <ProfileContext.Provider value={{ profiles, fetchProfiles, addProfile, deleteProfile }}>
             {children}
         </ProfileContext.Provider>
     );
