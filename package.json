@@ -2,8 +2,14 @@
   "name": "forms-app",
   "private": true,
   "workspaces": [
-    "common"
+    "common",
+    "client",
+    "server"
   ],
+  "scripts": {
+    "start": "node ./bin/www",
+    "build": "npm run build --workspaces"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

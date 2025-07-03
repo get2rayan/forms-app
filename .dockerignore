@@ -1,0 +1,18 @@
+# Ignore node_modules folders at any level
+**/node_modules
+
+# Standard Docker ignores
+.git
+.gitignore
+.dockerignore
+Dockerfile*
+docker-compose*
+README.md
+LICENSE
+.vscode/
+
+# Environment files (should be managed via Docker env variables or secrets)
+.env
+.env.*
+./client/.env.*
+./server/.env.*

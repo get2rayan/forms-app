@@ -19,7 +19,7 @@
     "clean": "rm -rf ./../build/server",
     "copy-views": "ncp ./views ./../build/server/views",
     "build": "npm run clean && npx tsc && npm run copy-views",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec npx 'ts-node' app.ts"
+    "dev": "nodemon --watch '**/*.ts' --exec npx ts-node app.ts"
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",
