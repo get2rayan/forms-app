@@ -1,0 +1,13 @@
+services:
+  app:
+    container_name: forms_app
+    image: forms_app_image
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVERPORT: 4000
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000

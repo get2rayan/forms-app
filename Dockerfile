@@ -9,18 +9,22 @@ WORKDIR /app
 COPY . .
 
 # This is the port where the server will run.
-ARG SERVERPORT=80
+ARG SERVERPORT=4000
 # environment variable for the client application to invoke server API for profiles
 ENV REACT_APP_API_URL_PROFILES=http://localhost:${SERVERPORT}/api/profiles
+RUN echo "REACT_APP_API_URL_PROFILES is set to ${REACT_APP_API_URL_PROFILES}"
 
-# Build Common Library
-RUN cd common && npm install && npm run build
+# Install dependencies for Common Library
+RUN cd common && npm install 
 
-# Build Client Application
-RUN cd client && npm install && npm run build
+# Install dependencies for Client Application
+RUN cd client && npm install 
 
-# Build Server Application
-RUN cd server && npm install && npm run build
+# Install dependencies for Server Application
+RUN cd server && npm install 
+
+# Build the workspace that will build common, client, and server applications
+RUN npm run build
 
 # # Stage 2: Create the final production-ready image
 # # We use a smaller Alpine-based Node.js image for production for reduced size.
@@ -38,13 +42,13 @@ COPY --from=builder /app/bin ./bin
 # Copy package.json and package-lock.json
 COPY --from=builder /app/package*.json ./
 
-# Install dependencies
+# # Install dependencies
 RUN npm install
 
 # environment variables for parent monorepo application
 ENV NODE_APP=./../build/server/app
 
 # Expose your app port (change if needed)
-EXPOSE 4000
+EXPOSE $SERVERPORT
 
 ENTRYPOINT [ "npm","start" ]
