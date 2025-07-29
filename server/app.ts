@@ -51,17 +51,20 @@ app.use((err: ErrorWithStatus, req: Request, res: Response, next: NextFunction) 
   res.render('error');
 });
 
-// // /******* fallback code to run app on PORT when running locally *****/
-// // /*****Uncomment the following lines to run the app on a specific port when running locally *****/
-// const port = process.env.PORT || 3030;  // Default to port 3030 if not specified in environment variables
-// app.listen(port, (err?: Error) => {
-//   if (err) {
-//       console.error("Error starting the server:", err);
-//       return;
-//   }   
-//   console.log(`Server app is running on http://localhost:${port}`);
-// });
-// /*****************************************************************/
+// /******* fallback code to run app on PORT when running as a standalone server outside of monorepo *****/
+// if SERVERPORT is set in environment variables, it is running as a standalone server
+// Otherwise, it is running as part of a monorepo and will use the port specified
+if (process.env.SERVERPORT) {
+  const port = process.env.SERVERPORT;  // Default to port 3030 if not specified in environment variables
+  app.listen(port, (err?: Error) => {
+    if (err) {
+        console.error("Error starting the server:", err);
+        return;
+    }   
+    console.log(`Server is running as standalone on http://localhost:${port}`);
+  });
+}
+/*****************************************************************/
 
 // Export the configured app so it can be imported in other files (like bin/www)
 module.exports = app;

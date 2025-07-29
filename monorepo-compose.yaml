@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        SERVERPORT: 4000
+        MONOREPOPORT: 5000
     ports:
-      - "4000:4000"
+      - "5000:5000"
     environment:
-      - PORT=4000
+      - MONOREPOPORT=5000

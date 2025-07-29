@@ -9,10 +9,15 @@ WORKDIR /app
 COPY . .
 
 # This is the port where the server will run.
-ARG SERVERPORT=4000
+ARG MONOREPOPORT=5000
+ENV MONOREPOPORT=$MONOREPOPORT
+
 # environment variable for the client application to invoke server API for profiles
-ENV REACT_APP_API_URL_PROFILES=http://localhost:${SERVERPORT}/api/profiles
+ENV REACT_APP_API_URL_PROFILES=http://localhost:${MONOREPOPORT}/api/profiles
 RUN echo "REACT_APP_API_URL_PROFILES is set to ${REACT_APP_API_URL_PROFILES}"
+
+ARG MONGODB_URI=mongodb://xxxxxxxx.xxx
+ENV MONGODB_URI=$MONGODB_URI
 
 # Install dependencies for Common Library
 RUN cd common && npm install 
@@ -48,7 +53,8 @@ RUN npm install
 # environment variables for parent monorepo application
 ENV NODE_APP=./../build/server/app
 
+RUN echo "MONOREPOPORT is set to ${MONOREPOPORT}"
 # Expose your app port (change if needed)
-EXPOSE $SERVERPORT
+EXPOSE $MONOREPOPORT
 
 ENTRYPOINT [ "npm","start" ]

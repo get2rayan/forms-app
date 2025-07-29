@@ -1,0 +1,35 @@
+services:
+
+  client:
+    container_name: forms_app.client
+    image: forms_app/client
+    build:
+      context: .
+      dockerfile: client.Dockerfile
+      args:
+        SERVERPORT: 4000
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - forms_app_network
+      
+  server:
+    container_name: forms_app.server
+    image: forms_app/server
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+      args:
+        SERVERPORT: 4000
+    ports:
+      - "4000:4000"
+    environment:
+      - MONGODB_URI=mongodb+srv://rayanis4u:wAkr3dvXQSqYmDMu@cluster0.zrrymrf.mongodb.net/?retryWrites=true&w=majority
+    networks:
+      - forms_app_network
+
+networks:
+  forms_app_network:
+    driver: bridge

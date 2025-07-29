@@ -2,9 +2,7 @@
   "name": "forms-app",
   "private": true,
   "workspaces": [
-    "common",
-    "client",
-    "server"
+    "common"
   ],
   "scripts": {
     "start": "node ./bin/www",
