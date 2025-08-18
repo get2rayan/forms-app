@@ -26,7 +26,7 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - MONGODB_URI=mongodb+srv://rayanis4u:wAkr3dvXQSqYmDMu@cluster0.zrrymrf.mongodb.net/?retryWrites=true&w=majority
+      - MONGODB_URI=${MONGODB_URI}
     networks:
       - forms_app_network
 
