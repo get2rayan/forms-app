@@ -225,6 +225,9 @@ COLLECTION_NAME="profiles"
         ```bash
         $ docker compose -f monorepo-compose.yaml up -d
         ```
+        <p align="center">
+            <img src="resources/docker-container-monorepo.png">
+        </p>
 * multi-repo
     *   Build container images
         * client

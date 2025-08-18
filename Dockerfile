@@ -53,6 +53,8 @@ RUN npm install
 # environment variables for parent monorepo application
 ENV NODE_APP=./../build/server/app
 
+RUN echo "MONGODB_URI is set to ${MONGODB_URI}"
+
 RUN echo "MONOREPOPORT is set to ${MONOREPOPORT}"
 # Expose your app port (change if needed)
 EXPOSE $MONOREPOPORT
